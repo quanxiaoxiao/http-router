@@ -3,9 +3,10 @@ import { decodeContentToJSON } from '@quanxiaoxiao/http-utils';
 
 export default ({
   getRouteMatches,
+  logger,
   onRequest,
   onResponse,
-  logger,
+  onSocketClose,
 }) => ({
   onHttpRequestStartLine: (ctx) => {
     const routeMatchList = getRouteMatches();
@@ -89,6 +90,11 @@ export default ({
     }
     if (ctx.response.statusCode >= 500 && ctx.response.statusCode <= 599) {
       console.error(ctx.error);
+    }
+  },
+  onClose: (ctx) => {
+    if (onSocketClose) {
+      onSocketClose(ctx);
     }
   },
 });
