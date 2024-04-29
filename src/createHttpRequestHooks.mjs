@@ -45,7 +45,7 @@ export default ({
         ctx.onRequest = async (_ctx) => {
           const data = decodeContentToJSON(ctx.request.body, _ctx.request.headers);
           if (!data) {
-            throw createError(400);
+            throw createError(400, 'parse request body fail');
           }
           if (!requestHandler.validate(data)) {
             throw createError(400, JSON.stringify(requestHandler.validate.errors));
@@ -58,7 +58,7 @@ export default ({
       if (ctx.routeMatched.select) {
         ctx.onResponse = (_ctx) => {
           if (!_ctx.response) {
-            throw createError(503);
+            throw createError(503, '`ctx.response` is not set');
           }
           if (!_ctx.response.data) {
             throw createError(404);
